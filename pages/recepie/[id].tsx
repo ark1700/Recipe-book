@@ -1,17 +1,19 @@
 import Head from 'next/head'
-import clientPromise from '../lib/mongodb'
+import clientPromise from '../../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import { ObjectId } from 'mongodb';
 
-export async function getServerSideProps() {
+export async function getServerSideProps({params}: any) {
   try {
     const client = await clientPromise;
     const db = client.db("recipes");
-    const recipes = await db.collection("recipes").find().toArray();
+    const recipe = await db.collection("recipes").findOne(new ObjectId(params.id));
+    console.log(params);
 
     return {
       props: {
         isConnected: true,
-        recipes: JSON.parse(JSON.stringify(recipes)),
+        recipe: JSON.parse(JSON.stringify(recipe)),
       },
     }
   } catch (e) {
@@ -23,8 +25,7 @@ export async function getServerSideProps() {
 }
 
 export default function Home({
-  isConnected,
-  recipes
+  recipe
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="container">
@@ -34,17 +35,16 @@ export default function Home({
       </Head>
 
       <main>
-        <h1 className="title">
-          Recepie book
-        </h1>
+        <h1 className="title">{recipe.name}</h1>
 
         <div className="grid">
-          {recipes.map((item: any) => (
-            <a href={`/recepie/${item._id}`} className="card" key={item._id}>
-              <h3>{item.name} &rarr;</h3>
-              <img src={item.img} alt={item.name} />
-            </a>
-          ))}
+          <img src={recipe.img} alt={recipe.name} />
+          <p>{recipe.descr}</p>
+          <ul>
+            {recipe.ingredients.map((i: String, index: React.Key) => (
+              <li key={index}>{i}</li>
+            ))}
+          </ul>
         </div>
       </main>
 
@@ -163,12 +163,6 @@ export default function Home({
           margin: 0;
           font-size: 1.25rem;
           line-height: 1.5;
-        }
-
-        .card img {
-          width: 100%;
-          height: 200px;
-          object-fit: cover;
         }
 
         .logo {
