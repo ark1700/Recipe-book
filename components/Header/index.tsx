@@ -8,12 +8,11 @@ import { Container } from '@mui/material';
 export default function Header() {
   return (
     <Box sx={{
-      gap: 1,
       padding: 1,
       backgroundColor: (theme)=> theme.palette.primary.main,
       color: (theme)=> theme.palette.primary.contrastText,
     }}>
-      <Container fixed sx={{
+      <Container sx={{
         display: 'flex',
         flexDirection: {
           xs: 'column',
@@ -21,6 +20,7 @@ export default function Header() {
         },
         alignItems: 'center',
         justifyContent: 'space-between',
+        gap: 1,
       }}>
         <Typography
           variant="h6"
