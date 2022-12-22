@@ -1,21 +1,18 @@
 import Head from 'next/head'
-import clientPromise from '../../lib/mongodb'
-import { InferGetServerSidePropsType } from 'next'
-import { ObjectId } from 'mongodb';
+import axios from 'axios'
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { IIngredient } from '../../models/Recipe';
+import MainLayout from '../../layouts/MainLayout';
 
-export async function getServerSideProps({params}: any) {
+export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
   try {
-    const client = await clientPromise;
-    const db = client.db("recipes");
-    const recipe = await db.collection("recipes").findOne(new ObjectId(params.id));
-    console.log(params);
-
+    // const res = await axios.get(`${req.headers.referer}/api/recipes/${params?.id}`);
+    const res = await axios.get(`${process.env.BASE_URI}/api/recipes/${params?.id}`);
     return {
       props: {
-        isConnected: true,
-        recipe: JSON.parse(JSON.stringify(recipe)),
+        recipe: res.data,
       },
-    }
+    };
   } catch (e) {
     console.error(e)
     return {
@@ -24,29 +21,26 @@ export async function getServerSideProps({params}: any) {
   }
 }
 
-export default function Home({
+export default function RecipePage({
   recipe
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div className="container">
-      <Head>
-        <title>Recepie book</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <MainLayout title={recipe?.title}>
+      {recipe && (
+        <main>
+          <h1 className="title">{recipe.title}</h1>
 
-      <main>
-        <h1 className="title">{recipe.name}</h1>
-
-        <div className="grid">
-          <img src={recipe.img} alt={recipe.name} />
-          <p>{recipe.descr}</p>
-          <ul>
-            {recipe.ingredients.map((i: String, index: React.Key) => (
-              <li key={index}>{i}</li>
-            ))}
-          </ul>
-        </div>
-      </main>
+          <div className="grid">
+            <img src={recipe.img} alt={recipe.name} />
+            <p>{recipe.descr}</p>
+            <ul>
+              {recipe.ingredients.map((i: IIngredient, index: React.Key) => (
+                <li key={index}>{i.name} - {i.amount}</li>
+              ))}
+            </ul>
+          </div>
+        </main>
+      )}
 
       <style jsx>{`
         .container {
@@ -191,6 +185,6 @@ export default function Home({
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+    </MainLayout>
   )
 }

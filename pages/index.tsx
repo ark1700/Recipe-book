@@ -1,48 +1,38 @@
-import Head from 'next/head'
-import clientPromise from '../lib/mongodb'
-import { InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { IRecipe } from '../models/Recipe';
+import axios from 'axios';
+import MainLayout from '../layouts/MainLayout';
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
   try {
-    const client = await clientPromise;
-    const db = client.db("recipes");
-    const recipes = await db.collection("recipes").find().toArray();
-
+    console.log(req.headers);
+    // const res = await axios.get(`${req.headers.referer}/api/recipes`);
+    const res = await axios.get(`${process.env.BASE_URI}/api/recipes`);
     return {
       props: {
-        isConnected: true,
-        recipes: JSON.parse(JSON.stringify(recipes)),
+        recipes: res.data,
       },
-    }
+    };
   } catch (e) {
     console.error(e)
     return {
-      props: { isConnected: false },
+      props: {},
     }
   }
 }
 
 export default function Home({
-  isConnected,
-  recipes
+  recipes,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div className="container">
-      <Head>
-        <title>Recepie book</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <MainLayout>
       <main>
-        <h1 className="title">
-          Recepie book
-        </h1>
-
+        <h1 className="title">Recipe book</h1>
         <div className="grid">
-          {recipes.map((item: any) => (
-            <a href={`/recepie/${item._id}`} className="card" key={item._id}>
-              <h3>{item.name} &rarr;</h3>
-              <img src={item.img} alt={item.name} />
+          {recipes?.map((item:IRecipe) => (
+            <a href={`/recipe/${item._id}`} className="card" key={item._id.toString()}>
+              <h3>{item.title} &rarr;</h3>
+              <img src={item.img} alt={item.title} />
             </a>
           ))}
         </div>
@@ -197,6 +187,6 @@ export default function Home({
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+    </MainLayout>
   )
 }
