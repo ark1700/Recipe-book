@@ -1,16 +1,15 @@
-import Head from 'next/head'
-import axios from 'axios'
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
-import { IIngredient } from '../../models/Recipe';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Recipe, { IIngredient } from '../../models/Recipe';
 import MainLayout from '../../layouts/MainLayout';
+import dbConnect from '../../lib/mongodb';
 
-export const getServerSideProps: GetServerSideProps = async ({ params, req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   try {
-    // const res = await axios.get(`${req.headers.referer}/api/recipes/${params?.id}`);
-    const res = await axios.get(`${process.env.BASE_URI}/api/recipes/${params?.id}`);
+    await dbConnect()
+    const recipe = await Recipe.findById(params?.id)
     return {
       props: {
-        recipe: res.data,
+        recipe: JSON.parse(JSON.stringify(recipe)),
       },
     };
   } catch (e) {

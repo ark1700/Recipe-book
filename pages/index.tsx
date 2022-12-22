@@ -1,17 +1,16 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { IRecipe } from '../models/Recipe';
-import axios from 'axios';
+import Recipe, { IRecipe } from '../models/Recipe';
 import MainLayout from '../layouts/MainLayout';
+import dbConnect from '../lib/mongodb';
 
 export const getServerSideProps: GetServerSideProps = async ({req}) => {
   try {
-    console.log(req.headers);
-    // const res = await axios.get(`${req.headers.referer}/api/recipes`);
-    const res = await axios.get(`${process.env.BASE_URI}/api/recipes`);
+    await dbConnect()
+    const recipes = await Recipe.find({})
     return {
       props: {
-        recipes: res.data,
-      },
+        recipes: JSON.parse(JSON.stringify(recipes)),
+      }
     };
   } catch (e) {
     console.error(e)
@@ -23,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
 
 export default function Home({
   recipes,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetServerSidePropsType<GetServerSideProps>) {
   return (
     <MainLayout>
       <main>
