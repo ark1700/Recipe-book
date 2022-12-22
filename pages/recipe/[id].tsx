@@ -21,15 +21,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 }
 
-export default function RecipePage({
-  recipe
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function RecipePage({recipe}: {recipe: IRecipe}) {
   return (
     <MainLayout title={recipe?.title}>
       {recipe && (
         <Container>
           <h1 className="title">{recipe.title}</h1>
-          <img src={recipe.img} alt={recipe.name} />
+          <img src={recipe.img} alt={recipe.title} />
           <p>{recipe.descr}</p>
           <p>Prep: {recipe.prepTimeInMinutes} minutes</p>
           <p>Cook: {recipe.prepTimeInMinutes} minutes</p>
@@ -47,7 +45,7 @@ export default function RecipePage({
           <p>Protein: {recipe.nutrition.protein}g</p>
           <h2>Method</h2>
           <ul>
-            {recipe.method.map((i: IRecipe["method"], index: number) => (
+            {recipe.method.map((i, index: number) => (
               <li key={index}>{i.descr}</li>
             ))}
           </ul>

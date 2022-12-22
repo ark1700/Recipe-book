@@ -23,9 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
   }
 }
 
-export default function Home({
-  recipes,
-}: InferGetServerSidePropsType<GetServerSideProps>) {
+export default function Home({recipes}: {recipes: [IRecipe]}) {
   return (
     <MainLayout>
       <Container sx={{
