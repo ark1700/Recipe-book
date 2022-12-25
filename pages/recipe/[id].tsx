@@ -24,12 +24,18 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 export default function RecipePage({recipe}: {recipe: IRecipe}) {
   return (
     <MainLayout title={recipe?.title}>
-      {recipe && (
+      {!recipe ? (
+        <h1>Data error</h1>
+      ) : (
         <Container>
           <h1 className="title">{recipe.title}</h1>
-          <img src={recipe.img} alt={recipe.title} />
+          {recipe.prepTimeInMinutes && (
+            <img src={recipe.img} alt={recipe.title} />
+          )}
           <p>{recipe.descr}</p>
-          <p>Prep: {recipe.prepTimeInMinutes} minutes</p>
+          {recipe.prepTimeInMinutes && (
+            <p>Prep: {recipe.prepTimeInMinutes} minutes</p>
+          )}
           <p>Cook: {recipe.prepTimeInMinutes} minutes</p>
           <p>Serves: {recipe.serves} minutes</p>
           <h2>Ingredients</h2>
@@ -39,14 +45,19 @@ export default function RecipePage({recipe}: {recipe: IRecipe}) {
             ))}
           </ul>
           <h2>Nutrition</h2>
-          <p>Calories: {recipe.nutrition.calories}kcal</p>
-          <p>Fat: {recipe.nutrition.fat}g</p>
-          <p>Carbs: {recipe.nutrition.carbs}g</p>
-          <p>Protein: {recipe.nutrition.protein}g</p>
+          <p>Calories: {recipe.nutrition.calories ?? '-'}kcal</p>
+          <p>Fat: {recipe.nutrition.fat ?? '-'}g</p>
+          <p>Carbs: {recipe.nutrition.carbs ?? '-'}g</p>
+          <p>Protein: {recipe.nutrition.protein ?? '-'}g</p>
           <h2>Method</h2>
           <ul>
             {recipe.method.map((i, index: number) => (
-              <li key={index}>{i.descr}</li>
+              <li key={index}>
+                <p>{i.descr}</p>
+                {i.img && (
+                  <img src={i.img} alt={`Step ${index}`} />
+                )}
+              </li>
             ))}
           </ul>
         </Container>

@@ -5,17 +5,18 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { IRecipe } from '../../models/Recipe';
+import Link from 'next/link';
 
 export default function RecipeCard({recipe} : {recipe: IRecipe}) {
   return (
     <Card sx={{
       display: 'flex'
     }}>
-      <CardActionArea href={`/recipe/${recipe._id}`}>
+      <CardActionArea component={Link} href={`/recipe/${recipe._id}`} passHref>
         <CardMedia
           component="img"
           height="140"
-          image={recipe.img}
+          image={recipe.img ?? 'https://img.freepik.com/premium-vector/electric-plug-barbeque-chef-with-grill_152558-63748.jpg'}
           alt={recipe.title}
         />
         <CardContent>

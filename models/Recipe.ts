@@ -4,20 +4,20 @@ export interface IRecipe {
   _id: Types.ObjectId,
   title: string,
   descr: string,
-  img: string,
-  prepTimeInMinutes: Number,
-  cooktTimeInMinutes: Number,
+  img?: string,
+  prepTimeInMinutes?: number,
+  cooktTimeInMinutes: number,
   ingredients: IIngredient[],
   nutrition: {
-    calories: Number,
-    fat: Number,
-    carbs: Number,
-    protein: Number,
+    calories?: number,
+    fat?: number,
+    carbs?: number,
+    protein?: number,
   },
-  serves: Number,
+  serves: number,
   method: [{
     descr: string,
-    img: String,
+    img?: string,
   }]
 }
 
