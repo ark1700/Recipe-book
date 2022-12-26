@@ -2,7 +2,10 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Recipe, { IIngredient, IRecipe } from '../../models/Recipe';
 import MainLayout from '../../layouts/MainLayout';
 import dbConnect from '../../lib/mongodb';
-import { Container } from '@mui/material';
+import { Container, List, ListItem, Typography } from '@mui/material';
+import Box from '@mui/material/Box/Box';
+import { Ingredient, IngredientDash, Ingredients, MainImg } from './styling';
+import Grid from '@mui/material/Grid';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   try {
@@ -28,38 +31,119 @@ export default function RecipePage({recipe}: {recipe: IRecipe}) {
         <h1>Data error</h1>
       ) : (
         <Container>
-          <h1 className="title">{recipe.title}</h1>
-          {recipe.prepTimeInMinutes && (
-            <img src={recipe.img} alt={recipe.title} />
-          )}
-          <p>{recipe.descr}</p>
-          {recipe.prepTimeInMinutes && (
-            <p>Prep: {recipe.prepTimeInMinutes} minutes</p>
-          )}
-          <p>Cook: {recipe.prepTimeInMinutes} minutes</p>
-          <p>Serves: {recipe.serves} minutes</p>
-          <h2>Ingredients</h2>
-          <ul>
-            {recipe.ingredients.map((i: IIngredient, index: React.Key) => (
-              <li key={index}>{i.name} - {i.amount}</li>
-            ))}
-          </ul>
-          <h2>Nutrition</h2>
-          <p>Calories: {recipe.nutrition.calories ?? '-'}kcal</p>
-          <p>Fat: {recipe.nutrition.fat ?? '-'}g</p>
-          <p>Carbs: {recipe.nutrition.carbs ?? '-'}g</p>
-          <p>Protein: {recipe.nutrition.protein ?? '-'}g</p>
-          <h2>Method</h2>
-          <ul>
-            {recipe.method.map((i, index: number) => (
-              <li key={index}>
-                <p>{i.descr}</p>
-                {i.img && (
-                  <img src={i.img} alt={`Step ${index}`} />
-                )}
-              </li>
-            ))}
-          </ul>
+          <Typography
+            variant="h3"
+            component="h1"
+            sx={{
+              marginBottom: 5,
+              textAlign: 'center',
+            }}
+          >{recipe.title}</Typography>
+          <Container maxWidth="sm">
+            {recipe.prepTimeInMinutes && (
+              <MainImg src={recipe.img} alt={recipe.title} />
+            )}
+            <Typography sx={{marginBlock: 2}}>{recipe.descr}</Typography>
+            <Grid
+              container
+              rowSpacing={0}
+              columnSpacing={2}
+              columns={{ xs: 4, sm: 12 }}
+              sx={{ marginBottom: 3 }}
+            >
+              {recipe.prepTimeInMinutes && (
+                <Grid item xs={4}>
+                  <Typography fontSize={12} sx={{margin: 0}}><b>Prep:</b> {recipe.prepTimeInMinutes} minutes</Typography>
+                </Grid>
+              )}
+              <Grid item xs={4}>
+                <Typography fontSize={12} sx={{margin: 0}}><b>Cook:</b> {recipe.prepTimeInMinutes} minutes</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography fontSize={12} sx={{margin: 0}}><b>Serves:</b> {recipe.serves}</Typography>
+              </Grid>
+            </Grid>
+            <Typography
+              variant='h5'
+              component='h2'
+              sx={{marginBlock: 2}}
+            >
+              Ingredients:
+            </Typography>
+            <Ingredients>
+              {recipe.ingredients.map((i: IIngredient, index: React.Key) => (
+                <Ingredient key={index}>
+                  <span>{i.name}</span>
+                  <IngredientDash></IngredientDash>
+                  <span>{i.amount}</span>
+                </Ingredient>
+              ))}
+            </Ingredients>
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={{marginBlock: 2}}
+            >Nutrition per serve</Typography>
+            <Grid
+              container
+              rowSpacing={0}
+              columnSpacing={2}
+              columns={{ xs: 4, sm: 12 }}
+              sx={{ marginBottom: 3 }}
+            >
+              <Grid item xs={3}>
+                <Typography fontSize={12} sx={{
+                  margin: 0,
+                  display: 'grid',
+                }}>
+                  <b>Calories:</b>
+                  <span>{recipe.nutrition.calories ?? '-'}kcal</span>
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography fontSize={12} sx={{
+                  margin: 0,
+                  display: 'grid',
+                }}>
+                  <b>Fat:</b>
+                  <span>{recipe.nutrition.fat ?? '-'}g</span>
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography fontSize={12} sx={{
+                  margin: 0,
+                  display: 'grid',
+                }}>
+                  <b>Carbs:</b>
+                  <span>{recipe.nutrition.carbs ?? '-'}g</span>
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography fontSize={12} sx={{
+                  margin: 0,
+                  display: 'grid',
+                }}>
+                  <b>Protein:</b>
+                  <span>{recipe.nutrition.protein ?? '-'}g</span>
+                </Typography>
+              </Grid>
+            </Grid>
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={{marginBlock: 2}}
+            >Method</Typography>
+            <ul>
+              {recipe.method.map((i, index: number) => (
+                <li key={index}>
+                  <p>{i.descr}</p>
+                  {i.img && (
+                    <img src={i.img} alt={`Step ${index}`} />
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Container>
         </Container>
       )}
     </MainLayout>

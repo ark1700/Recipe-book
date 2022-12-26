@@ -26,9 +26,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
 export default function Home({recipes}: {recipes: [IRecipe]}) {
   return (
     <MainLayout>
-      <Container sx={{
-        paddingBlock: 5,
-      }}>
+      <Container>
         <Grid container spacing={2} alignItems="stretch">
             {recipes?.map((item:IRecipe) => (
               <Grid item xs={12} sm={6} md={4} key={item._id.toString()}  sx={{

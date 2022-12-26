@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "../components/Header";
 import Head from "next/head";
+import Box from '@mui/material/Box';
 
 interface MainLayoutProps {
   title?: string;
@@ -26,7 +27,11 @@ const MainLayout: React.FC<MainLayoutProps>
           <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header/>
-      {children}
+      <Box sx={{
+        paddingBlock: 5,
+      }}>
+        {children}
+      </Box>
     </>
   );
 };
