@@ -1,10 +1,9 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
 import Recipe, { IIngredient, IRecipe } from '../../models/Recipe';
 import MainLayout from '../../layouts/MainLayout';
 import dbConnect from '../../lib/mongodb';
-import { Container, List, ListItem, Typography } from '@mui/material';
-import Box from '@mui/material/Box/Box';
-import { Ingredient, IngredientDash, Ingredients, MainImg } from './styling';
+import { Container, Typography } from '@mui/material';
+import { Ingredient, IngredientDash, Ingredients, MainImg } from '../../styles/recipe';
 import Grid from '@mui/material/Grid';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
