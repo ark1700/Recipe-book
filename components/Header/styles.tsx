@@ -8,10 +8,9 @@ export const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: 0,
+  marginLeft: 'auto',
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
     width: 'auto',
   },
 }));
@@ -53,5 +52,16 @@ export const Logo = styled(Link)(({ theme }) => ({
     width: '50px',
     height: '50px',
     objectFit: 'contain',
+  }
+}));
+
+export const Profile = styled(Link)(({ theme }) => ({
+  display: 'block',
+  width: '30px',
+  height: '30px',
+  color:theme.palette.common.white,
+  'svg': {
+    width: '100%',
+    height: '100%',
   }
 }));

@@ -2,10 +2,14 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
-import { Logo, Search, SearchIconWrapper, StyledInputBase } from './styles';
+import { Logo, Profile, Search, SearchIconWrapper, StyledInputBase } from './styles';
 import { Container } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Link from 'next/link';
+import { getSession, useSession, signOut } from "next-auth/react"
 
 export default function Header() {
+  const { data: session} = useSession();
   return (
     <Box sx={{
       padding: 1,
@@ -20,18 +24,16 @@ export default function Header() {
         },
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 1,
+        gap: 2,
       }}>
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-        >
-          <Logo href='/'>
-            <img src="/cupcake.png" alt="Logo" width="100%" height="100%"/>
-            <span>Recipe book</span>
-          </Logo>
-        </Typography>
+        <Logo href='/' passHref>
+          <img src="/cupcake.png" alt="Logo" width="100%" height="100%"/>
+          <Typography
+            variant="h6"
+            noWrap
+            component="span"
+          >Recipe book</Typography>
+        </Logo>
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
@@ -41,6 +43,9 @@ export default function Header() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+        <Profile href="/profile" passHref>
+          <AccountCircleIcon color="inherit"></AccountCircleIcon>
+        </Profile>
       </Container>
     </Box>
   );
