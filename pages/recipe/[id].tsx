@@ -39,7 +39,7 @@ export default function RecipePage({recipe}: {recipe: IRecipe}) {
             }}
           >{recipe.title}</Typography>
           <Container maxWidth="sm">
-            {recipe.prepTimeInMinutes && (
+            {recipe.img && (
               <MainImg src={recipe.img} alt={recipe.title} />
             )}
             <Typography sx={{marginBlock: 2}}>{recipe.descr}</Typography>
@@ -55,9 +55,11 @@ export default function RecipePage({recipe}: {recipe: IRecipe}) {
                   <Typography fontSize={12} sx={{margin: 0}}><b>Prep:</b> {recipe.prepTimeInMinutes} minutes</Typography>
                 </Grid>
               )}
-              <Grid item xs={4}>
-                <Typography fontSize={12} sx={{margin: 0}}><b>Cook:</b> {recipe.prepTimeInMinutes} minutes</Typography>
-              </Grid>
+              {recipe.cookTimeInMinutes && (
+                <Grid item xs={4}>
+                  <Typography fontSize={12} sx={{margin: 0}}><b>Cook:</b> {recipe.cookTimeInMinutes} minutes</Typography>
+                </Grid>
+              )}
               <Grid item xs={4}>
                 <Typography fontSize={12} sx={{margin: 0}}><b>Serves:</b> {recipe.serves}</Typography>
               </Grid>
@@ -137,7 +139,7 @@ export default function RecipePage({recipe}: {recipe: IRecipe}) {
                 <li key={index}>
                   <p>{i.descr}</p>
                   {i.img && (
-                    <img src={i.img} alt={`Step ${index}`} />
+                    <MainImg src={i.img} alt={`Step ${index}`} />
                   )}
                 </li>
               ))}

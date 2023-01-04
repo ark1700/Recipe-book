@@ -6,7 +6,7 @@ export interface IRecipe {
   descr: string,
   img?: string,
   prepTimeInMinutes?: number,
-  cooktTimeInMinutes: number,
+  cookTimeInMinutes?: number,
   ingredients: IIngredient[],
   nutrition: {
     calories?: number,
@@ -16,7 +16,7 @@ export interface IRecipe {
   },
   serves: number,
   method: [{
-    descr: string,
+    descr?: string,
     img?: string,
   }]
 }
@@ -38,11 +38,9 @@ const RecipeSchema = new mongoose.Schema({
   img: String,
   prepTimeInMinutes: {
     type: Number,
-    required: true,
   },
-  cooktTimeInMinutes: {
+  cookTimeInMinutes: {
     type: Number,
-    required: true,
   },
   ingredients: {
     type: [{

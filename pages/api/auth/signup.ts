@@ -19,12 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           message: 'User already exist',
         })
       }
-
+      const hashPass = await hash(password, 12);
+      
       User.create(
         {
           username,
           email,
-          password: await hash(password, 12)
+          password: hashPass
         },
         (err: any, data: any) => {
           if(err) {

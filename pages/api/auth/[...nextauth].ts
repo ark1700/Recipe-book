@@ -24,6 +24,35 @@ export const authOptions = {
           label: "Email",
           type: "text",
         },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
+      async authorize(credentials) {
+        try {
+          dbConnect()
+          const result = await User.findOne({email: credentials?.email})
+          if(!result) {
+            throw new Error("No user found with email. Please Sign Up")
+          }
+          const checkPassword = await compare(credentials?.password || '', result.password)
+          if(!checkPassword || result.email !== credentials?.email) {
+            throw new Error("Username of password dosen't match")
+          }
+          return result
+        } catch(err) {
+          console.error(err);
+        }
+      }
+    }),
+    CredentialsProvider({
+      name: "CredentialsS",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "text",
+        },
         username: {
           label: "Username",
           type: "text",

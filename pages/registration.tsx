@@ -11,20 +11,34 @@ import { useFormik } from "formik";
 import { registerValidate } from '../lib/validate';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import absoluteUrl from 'next-absolute-url'
 
-export default function Register({}: {}) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const { req } = context;
+    const { origin } = absoluteUrl(req)
+    return {
+      props: {
+        host: origin,
+      }
+    };
+  } catch (e) {
+    console.error(e)
+    return {
+      props: {},
+    }
+  }
+}
+
+export default function Register({host}: {host: string}) {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
   const router = useRouter()
-  const onSubmit = (values: any) => {
+  const onSubmit = async (values: any) => {
     try {
       const {username, email, password} = values
-      console.log({
-        username,
-        email,
-        password,
-      });
-      axios.post(`${process.env.BASE_URI}/api/auth/signup`, {
+      axios.post(`${host}/api/auth/signup`, {
         username,
         email,
         password,
@@ -48,8 +62,7 @@ export default function Register({}: {}) {
     validate: registerValidate,
     onSubmit,
   });
-  const { errors, touched, getFieldProps } =
-    formik;
+  const { errors, touched, getFieldProps } = formik;
   return (
     <MainLayout>
       <Container maxWidth="sm">

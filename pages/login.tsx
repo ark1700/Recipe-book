@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
 export default function Login() {
   const router = useRouter()
-  const from = "/";
   const [showPassword, setShowPassword] = useState(false);
   const onSubmit = async (values: any) => {
     const {email, password} = values
@@ -40,7 +39,7 @@ export default function Login() {
       redirect: false,
       email,
       password,
-      callbackUrl: '/',
+      callbackUrl: `/`,
     })
     if (status?.ok) {
       router.push(status?.url ?? '/')
@@ -55,11 +54,10 @@ export default function Login() {
     validate: loginValidate,
     onSubmit,
   });
-  const { errors, touched, getFieldProps } =
-    formik;
+  const { errors, touched, getFieldProps } = formik;
   const googleSignInHandle = async () =>{
     signIn('google', {
-      callbackUrl: process.env.BASE_URI
+      callbackUrl: window.location.origin
     })
   }
   return (
