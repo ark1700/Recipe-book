@@ -31,11 +31,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
+interface IRegisterValues {
+  email: string,
+  username: string,
+  password: string,
+  cpassword: string,
+}
+
 export default function Register({host}: {host: string}) {
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
   const router = useRouter()
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: IRegisterValues) => {
     try {
       const {username, email, password} = values
       axios.post(`${host}/api/auth/signup`, {

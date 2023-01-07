@@ -29,11 +29,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     props: {}
   }
 }
+interface ILoginValues {
+  email: string,
+  password: string,
+}
 
 export default function Login() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: ILoginValues) => {
     const {email, password} = values
     const status = await signIn('credentials', {
       redirect: false,

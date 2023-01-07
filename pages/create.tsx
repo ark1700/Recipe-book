@@ -3,13 +3,12 @@ import { Box, Container } from '@mui/material';
 import { getSession } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
 import TextField from '@mui/material/TextField';
-import { Formik, FieldArray, useFormik, useFormikContext, Form, getIn } from 'formik';
+import { Formik, FieldArray, Form, getIn, FormikConfig } from 'formik';
 import absoluteUrl from 'next-absolute-url';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Ingredients } from '../styles/recipe';
 import * as Yup from "yup";
 import Divider from '@mui/material/Divider';
 
@@ -31,12 +30,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 }
 
-export default function Create({host}: any) {
+export default function Create({host}: {host: string}) {
   const router = useRouter()
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: typeof initialValues) => {
     try {
       const {title} = values
-      console.log(values);
       axios.post(`${host}/api/recipes`, values).then((res) => {
         const data = res.data
         if (data) {

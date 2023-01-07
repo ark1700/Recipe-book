@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
 import Recipe, { IRecipe } from '../models/Recipe';
 import MainLayout from '../layouts/MainLayout';
 import dbConnect from '../lib/mongodb';

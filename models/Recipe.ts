@@ -1,7 +1,7 @@
 import mongoose, { Types } from 'mongoose'
 
 export interface IRecipe {
-  _id: Types.ObjectId,
+  _id?: Types.ObjectId,
   title: string,
   descr: string,
   img?: string,

@@ -2,6 +2,7 @@ import dbConnect from "../../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import User from "../../../models/User";
 import { hash } from 'bcryptjs';
+import Error from "next/error";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   dbConnect();
@@ -20,14 +21,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
       }
       const hashPass = await hash(password, 12);
-      
+
       User.create(
         {
           username,
           email,
           password: hashPass
         },
-        (err: any, data: any) => {
+        (err: Error, data: {}) => {
           if(err) {
             return res.status(404).json({ err })
           }

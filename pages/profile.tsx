@@ -4,6 +4,7 @@ import { getSession, signOut } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import { Session } from 'next-auth';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req })
@@ -20,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 }
 
-export default function Create({session}: any) {
+export default function Create({session}: {session: Session}) {
   const googleSignOutHandle = async () =>{
     signOut({
       callbackUrl: `/`

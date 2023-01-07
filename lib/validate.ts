@@ -1,5 +1,19 @@
-export function loginValidate(values: any) {
-  const errors: any = {}
+import { FormikErrors, FormikValues } from "formik";
+
+interface ILoginValues {
+  email: string,
+  password: string,
+}
+
+interface IRegisterValues {
+  email: string,
+  username: string,
+  password: string,
+  cpassword: string,
+}
+
+export function loginValidate(values: ILoginValues) {
+  const errors: FormikErrors<FormikValues> = {}
 
   if (!values.email) {
     errors.email = 'Required';
@@ -18,8 +32,8 @@ export function loginValidate(values: any) {
   return errors;
 }
 
-export function registerValidate(values: any) {
-  const errors: any = {}
+export function registerValidate(values: IRegisterValues) {
+  const errors: FormikErrors<FormikValues> = {}
 
   if (!values.username) {
     errors.username = 'Required';
